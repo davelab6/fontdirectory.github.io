@@ -39,7 +39,7 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
 
                             // row has columns: tdName, tdBuildDate, tdBuildStatus, tdBuildReport
 
-                            $http.get('https://cdn.rawgit.com/fontdirectory/' + path + '/gh-pages/data/summary.tests.json').then(function(dataResponse) {
+                            $http.get('https://cdn.rawgit.com/fontdirectory/' + path + '/gh-pages/summary.tests.json').then(function(dataResponse) {
                                 var tests_data = dataResponse.data,
                                     totalTests = 0,
                                     successTests = 0;
