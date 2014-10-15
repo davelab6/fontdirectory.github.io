@@ -5,7 +5,7 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
 
     $scope.authenticateWithOAuth = function() {
         OAuth.initialize('ZapNqQn-kP45Mq8tXYZi0u_G9bc');
-        OAuth.popup('github')
+        OAuth.popup('github', {cache: true})
             .done(function(success){
                 // See the result below
                 $scope.OAuth_passed = true;
