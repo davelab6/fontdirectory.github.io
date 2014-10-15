@@ -1,0 +1,68 @@
+.footer {
+    color: #bbb;
+    text-align: center;
+    font-size: smaller;
+    padding: 0 0;
+    margin-top: 70px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.footer:hover {
+    color: #444;
+}
+
+.footer a {
+    color: #add8e6;
+}
+
+.footer:hover a {
+    color: #0088cc;
+}
+
+.footer p {
+    margin-bottom: 0;
+    color: #777;
+}
+.footer-links {
+    margin: 10px 0;
+}
+.footer-links li {
+    list-style: none;
+    line-height: 1.2em;
+}
+.footer-links li:first-child {
+    padding-left: 0;
+}
+
+.flex-container {
+    /* We first create a flex layout context */
+    display: flex;
+
+    /* Then we define the flow direction and if we allow the items to wrap
+     * Remember this is the same as:
+     * flex-direction: row;
+     * flex-wrap: wrap;
+     */
+    flex-flow: row wrap;
+
+    /* Then we define how is distributed the remaining space */
+    justify-content: space-around;
+}
+
+/*make table with depend on content*/
+.table-dynamic-width {
+    max-width: none;
+    width: inherit;
+}
+
+td.clickable {
+    cursor: pointer;
+}
+
+.popover {
+    max-width: 1980px;
+    font-family: Courier,serif;
+}
+
+/*just to have editor visible when it gets rendered*/
+.ace_editor { height: 100px; }

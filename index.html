@@ -1,0 +1,125 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title ng-bind="'Google Fonts &mdash; ' + title"></title>
+
+  <!-- load bootstrap and fontawesome via CDN -->
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" />
+
+  <!--load local static file-->
+  <link rel="stylesheet" href="static/css/libs/ng-table/style.css" />
+  <link rel="stylesheet" href="static/css/app.css" />
+</head>
+<body ng-controller="mainController" ng-cloak>
+
+<!-- HEADER AND NAVBAR -->
+<header ng-cloak>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <form class="navbar-form" role="search">
+          <div class="input-group">
+            <input type="text" autofocus class="form-control" placeholder="{{ metadata.name | default: 'Search'}}" name="selectRepo" ng-model="repo_selected" typeahead-editable="false" typeahead="r.submodule for r in repos_list | filter:$viewValue | limitTo:10" typeahead-on-select='onRepoSelect($item, $model, $label)'>
+            <div class="input-group-btn">
+              <button class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+            </div>
+          </div>
+        </form>
+      </div>
+      <!--<ul class="nav nav-tabs">-->
+      <ul nav-menu="active" class="nav navbar-nav navbar-right">
+        <li><a href="{{repo_info.gh_pages}}" target="_blank"><i class="fa fa-github"></i> gh-pages</a></li>
+        <li><a href="{{repo_info.url}}" target="_blank"><i class="fa fa-github-square"></i> Github Page</a></li>
+        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}"><i class="fa fa-bar-chart"></i> Summary</a></li>
+        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}/review-web-fonts"><i class="fa fa-binoculars"></i> Review</a></li>
+        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}/checks"><i class="fa fa-briefcase"></i> Pre-Build Checks</a></li>
+        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}/tests"><i class="fa fa-bug"></i> Tests</a></li>
+        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}/build-log"><i class="fa fa-file-text-o"></i> Build Log</a></li>
+        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}/metadata"><i class="fa fa-info-circle"></i> METADATA.json</a></li>
+        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}/bakery-yaml"><i class="fa fa-file"></i> bakery.yaml</a></li>
+        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}/description"><i class="fa fa-pencil-square-o"></i> Description</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<!-- MAIN CONTENT AND INJECTED VIEWS -->
+<div id="main" class="container-fluid">
+  <!--this is the place where all alerts pop-up, controlled by mainController -->
+  <div id=alerts-box ng-cloak>
+    <alert ng-repeat="alert in alerts.getAlerts()" type="{{alert.type}}" close="alerts.closeAlert($index)">{{ alert.msg }}</alert>
+  </div>
+  <!-- angular templating -->
+  <!-- this is where content will be injected -->
+  <div class="row">
+    <div ng-if="(app_info.build_passed || !repo_is_valid) && initDone() || isRoot()">
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" ng-view ng-cloak></div>
+    </div>
+    <div ng-if="app_info.build_passed == false">
+      <div ng-include src="'pages/buildfailed.html'" ng-cloak></div>
+    </div>
+  </div>
+</div>
+
+<!--Footer-->
+<footer class="footer" ng-cloak>
+  <div class="container-fluid">
+    <ul class="footer-links">
+      <li><a href='https://github.com/googlefonts/fontbakery-cli/edit/master/bakery_cli/report/app/{{ current_template }}'>Edit this page's template</a></li>
+      <li><a href='https://github.com/googlefonts/fontbakery-cli/'>Made with Font Bakery</a> (<a href='http://www.gnu.org/philosophy/free-sw.html'>libre software</a> available under the terms of the <a href='https://github.com/googlefonts/fontbakery-cli/blob/master/LICENSE.txt'>Apache 2.0 license</a>.)</li>
+      <li>Please <a href='https://github.com/googlefonts/fontbakery-cli/issues/new'>report bugs</a>, suggest features, and contribute on <a href='https://github.com/googlefonts/fontbakery-cli/'>GitHub <i class='icon-github'></i></a></li>
+      <li ng-if="app_info">{{ app_info.commit }}, {{ app_info.date }}</li>
+    </ul>
+  </div>
+</footer>
+
+<!-- load scripts from Google -->
+<script src="//nodebox.github.io/opentype.js/opentype.min.js" type="text/javascript" ></script>
+<script src="//fonts.googleapis.com/measure" type="text/javascript"></script>
+<script src="//www.google.com/jsapi" type="text/javascript"></script>
+
+<!-- load jQuery and Bootstrap scripts via CDN -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- load angular and angular-route via CDN -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-route.js"></script>
+
+<!--load third-party scripts-->
+<script src="static/js/libs/jsondiffpatch/bundle.full.min.js" type="text/javascript"></script>
+<script src="static/js/libs/jsondiffpatch/formatters.min.js" type="text/javascript"></script>
+
+<!--load third-party angular scripts-->
+<script src="static/bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="static/bower_components/oauth-js/dist/oauth.js"></script>
+<script src="static/bower_components/ace-builds/src-min-noconflict/ace.js" type="text/javascript"></script>
+<script src="static/bower_components/moment/moment.js"></script>
+<script src="static/bower_components/angular-moment/angular-moment.js"></script>
+<script src="static/bower_components/angular-ui-ace/ui-ace.js" type="text/javascript"></script>
+<script src="static/bower_components/angular-route-styles/route-styles.js"></script>
+<script src="static/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+<script src="static/bower_components/ng-table/ng-table.js"></script>
+<script src="static/js/libs/gchart/gchart.js"></script>
+
+<!--load app scripts-->
+<script src="static/js/app.js"></script>
+<script src="static/js/directives.js"></script>
+<script src="static/js/filters.js"></script>
+<script src="static/js/services.js"></script>
+<script src="static/js/controllers/mainController.js"></script>
+<script src="static/js/controllers/bakeryYamlController.js"></script>
+<script src="static/js/controllers/buildController.js"></script>
+<script src="static/js/controllers/checksController.js"></script>
+<script src="static/js/controllers/descriptionController.js"></script>
+<script src="static/js/controllers/metadataController.js"></script>
+<script src="static/js/controllers/reviewWebFontsController.js"></script>
+<script src="static/js/controllers/reviewGlyphInspectorController.js"></script>
+<script src="static/js/controllers/summaryController.js"></script>
+<script src="static/js/controllers/testsController.js"></script>
+<script src="static/js/controllers/reposController.js"></script>
+</body>
+</html>

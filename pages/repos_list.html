@@ -1,0 +1,27 @@
+<div class="container-fluid" ng-hide="OAuth_passed" ng-cloak>
+  <div class="jumbotron text-center">
+    <h1>Font Directory Dashboard</h1>
+    <div id="auth-button">
+      <p class="lead">Login via Github</p>
+      <button class="btn btn-lg btn-success" ng-click="authenticateWithOAuth()">Login</button>
+    </div>
+  </div>
+</div>
+<div ng-show="OAuth_passed">
+  <p class="text-center" ng-hide="dataLoaded">
+    <i class="fa fa-spinner fa-spin fa-5x"></i>
+  </p>
+  <div ng-show="dataLoaded">
+    <div class="flex-container">
+      <table id="buildsTable" ng-table="buildsTableParams" class="table table-striped table-hover table-bordered table-condensed">
+        <tr ng-repeat="build in $data">
+          <td data-title="'Repo'" sortable="'fontdirectory_link'"><a ng-href="{{ build.fontdirectory_link }}">{{ build.fontdirectory_link }}</a></td>
+          <td data-title="'Build Date'" sortable="'build_date'" am-time-ago="build.build_date"></td>
+          <td data-title="'Build Status'" sortable="'travis_link'" class="text-center"><a ng-href="{{ build.travis_link }}"><img ng-src="{{ build.travis_img }}"></a></td>
+          <td data-title="'Build Report'" sortable="'build_report'"><a ng-href="{{ build.build_report }}">{{ build.build_report }}</a></td>
+          <td data-title="'Tests Passing'" sortable="'passingTests'">{{ build.passingTests }}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
