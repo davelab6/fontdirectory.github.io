@@ -95,4 +95,10 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
                 $scope.alerts.addAlert(error);
             });
     };
+    $scope.init = function () {
+        if (!$scope.OAuth_passed) {
+            $scope.authenticateWithOAuth();
+        }
+    };
+    $scope.init();
 }]);
