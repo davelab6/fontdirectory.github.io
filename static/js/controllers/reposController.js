@@ -51,13 +51,13 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
                                 info['successTests'] = successTests;
                                 info['passingTests'] = Math.round((successTests / totalTests) * 100) + '%'
                             }, function(error) {
-                                $scope.alerts.addAlert(error);
+                                $scope.alerts.addAlert(error.message);
                             });
 
                             $http.get('https://api.travis-ci.org/repos/fontdirectory/' + path, {headers: { 'Accept': 'application/vnd.travis-ci.2+json' }}).then(function(dataResponse) {
                                 info['build_date'] = dataResponse.data.repo.last_build_finished_at;
                             }, function(error) {
-                                $scope.alerts.addAlert(error);
+                                $scope.alerts.addAlert(error.message);
                             });
                             data.push(info);
                         }
@@ -87,12 +87,12 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
                     });
                     $scope.dataLoaded = true;
                 }, function(error) {
-                    $scope.alerts.addAlert(error);
+                    $scope.alerts.addAlert(error.message);
                 });
             })
             .fail(function(error) {
                 $scope.OAuth_passed = false;
-                $scope.alerts.addAlert(error);
+                $scope.alerts.addAlert(error.message);
             });
     };
     $scope.init = function () {
