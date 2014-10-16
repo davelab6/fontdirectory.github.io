@@ -3,11 +3,15 @@
 </p>
 <div ng-show="dataLoaded">
   <h3>Tests</h3>
-  <div ng-repeat="chart in charts">
-    <div google-chart chart="chart" style="{{cssStyle}}"></div>
+  <div class="row">
+    <div class="col-xs-6 col-md-5 col-lg-4" ng-repeat="chart in charts">
+      <div google-chart chart="chart" style="{{cssStyle}}"></div>
+    </div>
   </div>
-  <div ng-if="average_chart">
-    <div google-chart chart="average_chart" style="{{cssStyle}}"></div>
+  <div class="row" ng-if="average_chart">
+    <div class="col-md-6 col-md-offset-3">
+      <div google-chart chart="average_chart" style="{{cssStyle}}"></div>
+    </div>
   </div>
 
   <div class="flex-container">
