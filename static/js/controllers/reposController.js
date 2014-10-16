@@ -102,7 +102,6 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
             })
             .fail(function(error) {
                 $scope.OAuth_passed = false;
-                $scope.alerts.addAlert(error.message);
             });
     };
     $scope.init = function () {
