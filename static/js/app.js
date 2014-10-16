@@ -91,7 +91,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
             activetab: 'summary',
             css: function(params) {
                 if (params.repo_name) {
-                    return ['//rawgit.com/' + [params.repo_owner, params.repo_name].join('/') +'/gh-pages/build_info/static/css/faces.css'];
+                    return [[appConfig.base_url, params.repo_owner, params.repo_name, 'gh-pages/build_info/static/css/faces.css'].join('/')];
                 } else {
                     return [];
                 }
@@ -110,7 +110,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
                     'static/css/pages/opentype.css'
                 ];
                 if (params.repo_name) {
-                    var faces = '//rawgit.com/' + [params.repo_owner, params.repo_name].join('/') +'/gh-pages/build_info/static/css/faces.css';
+                    var faces = [appConfig.base_url, params.repo_owner, params.repo_name, 'gh-pages/build_info/static/css/faces.css'].join('/');
                     links.push(faces);
                 }
                 return links;
@@ -129,7 +129,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
                     'static/css/pages/opentype.css'
                 ];
                 if (params.repo_name) {
-                    var faces = '//rawgit.com/' + [params.repo_owner, params.repo_name].join('/') +'/gh-pages/build_info/static/css/faces.css';
+                    var faces = [appConfig.base_url, params.repo_owner, params.repo_name, 'gh-pages/build_info/static/css/faces.css'].join('/');
                     links.push(faces);
                 }
                 return links;

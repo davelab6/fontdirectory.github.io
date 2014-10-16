@@ -1,4 +1,4 @@
-myApp.controller('reviewGlyphInspectorController', ['$scope', '$rootScope', '$window', function($scope, $rootScope, $window) {
+myApp.controller('reviewGlyphInspectorController', ['$scope', '$rootScope', '$window', '$route', 'appConfig', function($scope, $rootScope, $window, $route, appConfig) {
     $scope.dataLoaded = false;
     // Glyph inspector tab
     var cellCount = 100,
@@ -328,9 +328,16 @@ myApp.controller('reviewGlyphInspectorController', ['$scope', '$rootScope', '$wi
     angular.element(document).ready(function() {
         $scope.dataLoaded = true;
         if ($rootScope.metadata.fonts.length > 0) {
-            var fontFileName = '/static/css/fonts/'+$rootScope.metadata.fonts[0].filename;
-
-            document.getElementById('font-name').innerHTML = fontFileName;
+            var fontFileName = [
+                appConfig.base_url,
+                $route.current.params.repo_owner,
+                $route.current.params.repo_name,
+                'gh-pages/build_info/static/css/fonts',
+                $rootScope.metadata.fonts[0].filename
+            ].join('/');
+            var parser = document.createElement('a');
+            parser.href = fontFileName;
+            document.getElementById('font-name').innerHTML = parser.href.substr(parser.href.lastIndexOf('/') + 1);
 
             var fileButton = document.getElementById('file');
             fileButton.addEventListener('change', onReadFile, false);
