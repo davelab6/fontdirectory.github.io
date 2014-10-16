@@ -62,8 +62,10 @@ myApp.factory('httpInterceptor', ['$q', '$location', 'alertsFactory', function($
 
         // optional method
         'responseError': function(rejection) {
-            // add alert for every error
-            alertsFactory.addAlert(rejection.status + " - " + rejection.statusText + ": " + _config.url);
+            // add alert for every error if interceptor is allowed
+            if (!_config.nointercept) {
+                alertsFactory.addAlert(rejection.status + " - " + rejection.statusText + ": " + _config.url);
+            }
             return $q.reject(rejection);
         }
     };
