@@ -79,7 +79,8 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
         .when('/', {
             controller : 'reposController',
             title: 'Repos list',
-            templateUrl : 'pages/repos_list.html'
+            templateUrl : 'pages/repos_list.html',
+            activetab: 'repos'
         })
 
         // route for the summary page
@@ -87,6 +88,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
             title: 'Summary',
             templateUrl : 'pages/summary.html',
             controller  : 'summaryController',
+            activetab: 'summary',
             css: function(params) {
                 if (params.repo_name) {
                     return ['//rawgit.com/' + [params.repo_owner, params.repo_name].join('/') +'/gh-pages/build_info/static/css/faces.css'];
@@ -101,6 +103,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
             title: 'Review - Web Fonts',
             templateUrl : 'pages/review-web-fonts.html',
             controller  : 'reviewWebFontsController',
+            activetab: 'review_fonts',
             css: function(params) {
                 var links = [
                     'static/css/pages/review.css',
@@ -119,6 +122,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
             title: 'Review - Glyph Inspector',
             templateUrl : 'pages/review-glyph-inspector.html',
             controller  : 'reviewGlyphInspectorController',
+            activetab: 'review_fonts',
             css: function(params) {
                 var links = [
                     'static/css/pages/review.css',
@@ -136,14 +140,16 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
         .when('/:repo_owner/:repo_name/checks', {
             title: 'Pre-Build Checks',
             templateUrl : 'pages/checks.html',
-            controller  : 'checksController'
+            controller  : 'checksController',
+            activetab: 'checks'
         })
 
         // route for the tests page
         .when('/:repo_owner/:repo_name/tests', {
             title: 'Tests',
             templateUrl : 'pages/tests.html',
-            controller  : 'testsController'
+            controller  : 'testsController',
+            activetab: 'tests'
         })
 
         // route for the build log page
@@ -151,6 +157,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
             title: 'Build Log',
             templateUrl : 'pages/build.html',
             controller  : 'buildController',
+            activetab: 'build_log',
             css: 'static/css/pages/build-log.css'
         })
 
@@ -159,6 +166,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
             title: 'Metadata',
             templateUrl : 'pages/metadata.html',
             controller  : 'metadataController',
+            activetab: 'metadata',
             css: 'static/css/libs/jsondiffpatch/html.css'
         })
 
@@ -166,7 +174,8 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
         .when('/:repo_owner/:repo_name/bakery-yaml', {
             title: 'bakery.yaml',
             templateUrl : 'pages/bakery-yaml.html',
-            controller  : 'bakeryYamlController'
+            controller  : 'bakeryYamlController',
+            activetab: 'bakery_yaml'
         })
 
         // route for the description page
@@ -174,6 +183,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
             title: 'Description',
             templateUrl : 'pages/description.html',
             controller  : 'descriptionController',
+            activetab: 'description',
             css: 'static/css/libs/jsondiffpatch/html.css'
         })
         .otherwise({redirectTo: '/'});
@@ -200,6 +210,7 @@ myApp.run(['$location', '$rootScope', function($location, $rootScope) {
     $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
         $rootScope.title = current.$$route.title;
         $rootScope.current_template = current.$$route.templateUrl;
+        $rootScope.activetab = current.$$route.activetab;
     });
 }]);
 

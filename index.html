@@ -30,17 +30,37 @@
         </form>
       </div>
       <!--<ul class="nav nav-tabs">-->
-      <ul nav-menu="active" class="nav navbar-nav navbar-right">
-        <li><a href="{{repo_info.gh_pages}}" target="_blank"><i class="fa fa-github"></i> gh-pages</a></li>
-        <li><a href="{{repo_info.url}}" target="_blank"><i class="fa fa-github-square"></i> Github Page</a></li>
-        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}"><i class="fa fa-bar-chart"></i> Summary</a></li>
-        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}/review-web-fonts"><i class="fa fa-binoculars"></i> Review</a></li>
-        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}/checks"><i class="fa fa-briefcase"></i> Pre-Build Checks</a></li>
-        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}/tests"><i class="fa fa-bug"></i> Tests</a></li>
-        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}/build-log"><i class="fa fa-file-text-o"></i> Build Log</a></li>
-        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}/metadata"><i class="fa fa-info-circle"></i> METADATA.json</a></li>
-        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}/bakery-yaml"><i class="fa fa-file"></i> bakery.yaml</a></li>
-        <li ng-class="{'disabled': !app_info.build_passed}"><a href="#/{{ repo_current.owner }}/{{ repo_current.name }}/description"><i class="fa fa-pencil-square-o"></i> Description</a></li>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+          <a ng-href="{{repo_info.gh_pages}}" target="_blank"><i class="fa fa-github"></i> gh-pages</a>
+        </li>
+        <li>
+          <a ng-href="{{repo_info.url}}" target="_blank"><i class="fa fa-github-square"></i> Github Page</a>
+        </li>
+        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'summary' && app_info.build_passed}">
+          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}"><i class="fa fa-bar-chart"></i> Summary</a>
+        </li>
+        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'review_fonts' && app_info.build_passed}">
+          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/review-web-fonts"><i class="fa fa-binoculars"></i> Review</a>
+        </li>
+        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'checks' && app_info.build_passed}">
+          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/checks"><i class="fa fa-briefcase"></i> Pre-Build Checks</a>
+        </li>
+        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'tests' && app_info.build_passed}">
+          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/tests"><i class="fa fa-bug"></i> Tests</a>
+        </li>
+        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'build_log' && app_info.build_passed}">
+          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/build-log"><i class="fa fa-file-text-o"></i> Build Log</a>
+        </li>
+        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'metadata' && app_info.build_passed}">
+          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/metadata"><i class="fa fa-info-circle"></i> METADATA.json</a>
+        </li>
+        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'bakery_yaml' && app_info.build_passed}">
+          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/bakery-yaml"><i class="fa fa-file"></i> bakery.yaml</a>
+        </li>
+        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'description' && app_info.build_passed}">
+          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/description"><i class="fa fa-pencil-square-o"></i> Description</a>
+        </li>
       </ul>
     </div>
   </nav>
