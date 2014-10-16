@@ -99,7 +99,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
         })
 
         // route for the review page, web fonts tab
-        .when('/:repo_owner/:repo_name/review-web-fonts', {
+        .when('/:repo_owner/:repo_name/review', {
             title: 'Review - Web Fonts',
             templateUrl : 'pages/review-web-fonts.html',
             controller  : 'reviewWebFontsController',
@@ -118,7 +118,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
         })
 
         // route for the review page, glyph inspector tab
-        .when('/:repo_owner/:repo_name/review-glyph-inspector', {
+        .when('/:repo_owner/:repo_name/review/glyph-inspector', {
             title: 'Review - Glyph Inspector',
             templateUrl : 'pages/review-glyph-inspector.html',
             controller  : 'reviewGlyphInspectorController',
@@ -153,12 +153,12 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
         })
 
         // route for the build log page
-        .when('/:repo_owner/:repo_name/build-log', {
+        .when('/:repo_owner/:repo_name/log', {
             title: 'Build Log',
-            templateUrl : 'pages/build.html',
-            controller  : 'buildController',
-            activetab: 'build_log',
-            css: 'static/css/pages/build-log.css'
+            templateUrl : 'pages/log.html',
+            controller  : 'logController',
+            activetab: 'log',
+            css: 'static/css/pages/log.css'
         })
 
         // route for the metadata page
@@ -171,11 +171,11 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
         })
 
         // route for the bakery yaml page
-        .when('/:repo_owner/:repo_name/bakery-yaml', {
-            title: 'bakery.yaml',
-            templateUrl : 'pages/bakery-yaml.html',
-            controller  : 'bakeryYamlController',
-            activetab: 'bakery_yaml'
+        .when('/:repo_owner/:repo_name/setup', {
+            title: 'Setup',
+            templateUrl : 'pages/setup.html',
+            controller  : 'setupController',
+            activetab: 'setup'
         })
 
         // route for the description page

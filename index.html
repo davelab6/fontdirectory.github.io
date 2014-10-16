@@ -17,9 +17,14 @@
 
 <!-- HEADER AND NAVBAR -->
 <header ng-cloak>
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">
       <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
         <form class="navbar-form" role="search">
           <div class="input-group">
             <input type="text" autofocus class="form-control" placeholder="{{ metadata.name | default: 'Search'}}" name="selectRepo" ng-model="repo_selected" typeahead-editable="false" typeahead="r.submodule for r in repos_list | filter:$viewValue | limitTo:10" typeahead-on-select='onRepoSelect($item, $model, $label)'>
@@ -29,39 +34,44 @@
           </div>
         </form>
       </div>
-      <!--<ul class="nav nav-tabs">-->
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-          <a ng-href="{{repo_info.gh_pages}}" target="_blank"><i class="fa fa-github"></i> gh-pages</a>
-        </li>
-        <li>
-          <a ng-href="{{repo_info.url}}" target="_blank"><i class="fa fa-github-square"></i> Github Page</a>
-        </li>
-        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'summary' && app_info.build_passed}">
-          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}"><i class="fa fa-bar-chart"></i> Summary</a>
-        </li>
-        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'review_fonts' && app_info.build_passed}">
-          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/review-web-fonts"><i class="fa fa-binoculars"></i> Review</a>
-        </li>
-        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'checks' && app_info.build_passed}">
-          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/checks"><i class="fa fa-briefcase"></i> Pre-Build Checks</a>
-        </li>
-        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'tests' && app_info.build_passed}">
-          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/tests"><i class="fa fa-bug"></i> Tests</a>
-        </li>
-        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'build_log' && app_info.build_passed}">
-          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/build-log"><i class="fa fa-file-text-o"></i> Build Log</a>
-        </li>
-        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'metadata' && app_info.build_passed}">
-          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/metadata"><i class="fa fa-info-circle"></i> METADATA.json</a>
-        </li>
-        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'bakery_yaml' && app_info.build_passed}">
-          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/bakery-yaml"><i class="fa fa-file"></i> bakery.yaml</a>
-        </li>
-        <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'description' && app_info.build_passed}">
-          <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/description"><i class="fa fa-pencil-square-o"></i> Description</a>
-        </li>
-      </ul>
+
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-left">
+          <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'summary' && app_info.build_passed}">
+            <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}"><i class="fa fa-bar-chart"></i> Summary</a>
+          </li>
+          <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'setup' && app_info.build_passed}">
+            <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/setup"><i class="fa fa-file"></i> Setup</a>
+          </li>
+          <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'checks' && app_info.build_passed}">
+            <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/checks"><i class="fa fa-briefcase"></i> Pre-Build Checks</a>
+          </li>
+          <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'log' && app_info.build_passed}">
+            <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/log"><i class="fa fa-file-text-o"></i> Build Log</a>
+          </li>
+          <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'tests' && app_info.build_passed}">
+            <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/tests"><i class="fa fa-bug"></i> Tests</a>
+          </li>
+          <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'metadata' && app_info.build_passed}">
+            <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/metadata"><i class="fa fa-info-circle"></i> METADATA.json</a>
+          </li>
+          <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'description' && app_info.build_passed}">
+            <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/description"><i class="fa fa-pencil-square-o"></i> Description</a>
+          </li>
+          <li ng-class="{'disabled': !app_info.build_passed, 'active': activetab == 'review_fonts' && app_info.build_passed}">
+            <a ng-href="#/{{ repo_current.owner }}/{{ repo_current.name }}/review"><i class="fa fa-binoculars"></i> Review</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a ng-href="{{repo_info.gh_pages}}" target="_blank"><i class="fa fa-github"></i> gh-pages</a>
+          </li>
+          <li>
+            <a ng-href="{{repo_info.url}}" target="_blank"><i class="fa fa-github-square"></i> Github Page</a>
+          </li>
+        </ul>
+      </div>
+
     </div>
   </nav>
 </header>
@@ -131,8 +141,8 @@
 <script src="static/js/filters.js"></script>
 <script src="static/js/services.js"></script>
 <script src="static/js/controllers/mainController.js"></script>
-<script src="static/js/controllers/bakeryYamlController.js"></script>
-<script src="static/js/controllers/buildController.js"></script>
+<script src="static/js/controllers/setupController.js"></script>
+<script src="static/js/controllers/logController.js"></script>
 <script src="static/js/controllers/checksController.js"></script>
 <script src="static/js/controllers/descriptionController.js"></script>
 <script src="static/js/controllers/metadataController.js"></script>
