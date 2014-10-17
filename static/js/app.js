@@ -2,7 +2,7 @@
 
 // create module and include dependencies
 var myApp = angular.module(
-    'myApp', ['ngRoute', 'ui.bootstrap', 'ui.ace', 'googlechart', 'ngTable', 'ngSanitize', 'routeStyles', 'angularMoment']
+    'myApp', ['ngRoute', 'ui.bootstrap', 'ui.ace', 'googlechart', 'ngTable', 'ngSanitize', 'routeStyles', 'angularMoment', 'http-throttler']
 );
 
 // #TODO it would be better to get it from .json conf file once and use later.
@@ -201,6 +201,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
     // enable default caching
     $httpProvider.defaults.cache = true;
     // intercept http calls
+    $httpProvider.interceptors.push('httpThrottler');
     $httpProvider.interceptors.push('httpInterceptor');
 
 }]);

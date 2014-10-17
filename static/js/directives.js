@@ -54,6 +54,24 @@ angular.module('myApp').directive('insertGlyph', ['$compile', function($compile)
     };
 }]);
 
+angular.module('myApp').directive('getBuildInfo', ['$compile', function($compile) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            scope.build.getBuildInfoCallback(element, scope);
+        }
+    };
+}]);
+
+angular.module('myApp').directive('getTestsInfo', ['$compile', function($compile) {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            scope.build.getTestsInfoCallback(element, scope);
+        }
+    };
+}]);
+
 
 angular.module('myApp').directive('loadingContainer', function () {
     return {
