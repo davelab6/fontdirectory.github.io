@@ -6,7 +6,6 @@
   <table class="table table-dynamic-width table-striped table-hover table-bordered table-condensed">
     <thead>
     <tr>
-      <th>Filename</th>
       <th>Weight</th>
       <th>Roman</th>
       <th>Italic</th>
@@ -22,7 +21,7 @@
         <div ng-repeat="face in faces">
           <div ng-if="face.style == 'normal'">
             <div ng-style="{'font-family': face.postScriptName, 'font-style': 'normal', 'font-size': '24pt'}">
-              {{ pangram }}
+              {{ face.filename }}
             </div>
           </div>
         </div>
@@ -31,7 +30,7 @@
         <div ng-repeat="face in faces">
           <div ng-if="face.style == 'italic'">
             <div ng-style="{'font-family': face.postScriptName, 'font-size': '24pt'}">
-              {{ pangram }}
+              {{ face.filename }}
             </div>
           </div>
         </div>
@@ -40,14 +39,13 @@
     </tbody>
   </table>
 </div>
-<h4>Blockers</h4>
-<div ng-repeat="chart in pie_charts">
-  <div google-chart chart="chart" style="{{cssStyle}}"></div>
-</div>
+<h2 class="text-center">Blockers</h2>
 <div ng-if="average_pie_chart">
   <div google-chart chart="average_pie_chart" style="{{cssStyle}}"></div>
 </div>
-
+<div ng-repeat="chart in pie_charts">
+  <div google-chart chart="chart" style="{{cssStyle}}"></div>
+</div>
 <div class="flex-container">
   <table id="testsTable" ng-table="testsTableParams" class="table table-striped table-hover table-bordered table-condensed">
     <tr ng-repeat="test in $data track by $index" class="{{ test.result_class }}">
