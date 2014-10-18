@@ -77,7 +77,7 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
 
                     $scope.filteredTreeData = dataResponse.data.tree.filter(function(item) {
                         return "160000" == item.mode && "commit" == item.type;
-                    }).slice(1,43);
+                    });
 
                     $scope.buildsTableParams = new ngTableParams({
                         // show first page
