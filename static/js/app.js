@@ -201,7 +201,9 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
     // enable default caching
     $httpProvider.defaults.cache = true;
     // intercept http calls
+    // throttle active parallel requests
     $httpProvider.interceptors.push('httpThrottler');
+    // do some common error handling
     $httpProvider.interceptors.push('httpInterceptor');
 
 }]);

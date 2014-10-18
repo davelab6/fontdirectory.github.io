@@ -14,9 +14,7 @@
       service = {
         request: function(config) {
           var deferred;
-
-          $log.info("Incoming Request - current count = " + reqCount);
-          if (reqCount >= 100) {
+          if (reqCount >= 50) {
             $log.warn("Too many requests");
             deferred = $q.defer();
             httpBuffer.append(config, deferred);
@@ -26,8 +24,17 @@
             return config || $q.when(config);
           }
         },
+        // optional method
+        requestError: function(rejection) {
+            reqCount++;
+            return $q.reject(rejection);
+        },
+        responseError: function(rejection) {
+            reqCount--;
+            httpBuffer.retryOne();
+            return $q.reject(rejection);
+        },
         response: function(response) {
-          $log.info("Response received from server");
           reqCount--;
           httpBuffer.retryOne();
           return response || $q.when(response);
@@ -44,7 +51,6 @@
       buffer = [];
       retryHttpRequest = function(config, deferred) {
         if (config != null) {
-          $log.info("Resolving config promise");
           return deferred.resolve(config);
         }
       };
