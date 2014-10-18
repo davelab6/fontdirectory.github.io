@@ -4,7 +4,6 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
     $scope.reqCounter = 0;
     $scope.filteredTreeData = 0;
     $scope.itemsLoaded = false;
-    $scope.tableInitialized = false;
 
     var data = [],
         build_date_errors = [],
@@ -76,7 +75,7 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
                 reposApi.getCollection(success['access_token']).then(function(dataResponse) {
 
                     $scope.filteredTreeData = dataResponse.data.tree.filter(function(item) {
-                        return "160000" == item.mode && "commit" == item.type;
+                        return "160000" == item.mode && "commit" == item.type && item.path.split('/')[1] != 'fontbakery';
                     });
 
                     $scope.buildsTableParams = new ngTableParams({
@@ -94,16 +93,12 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
                         // length of data
                         total: $scope.filteredTreeData.length,
                         getData: function($defer, params) {
-                            if (!$scope.tableInitialized) {
+                            if ($scope.filteredTreeData.length != data.length) {
                                 angular.forEach($scope.filteredTreeData, function(item, index) {
                                     var info = {};
 
                                     var path = item.path.split('/')[1];
 
-                                    // ignore fontbakery repo, as it is not a font repo
-                                    if (path == 'fontbakery') {
-                                        return
-                                    }
                                     info['repoPath'] = item.path;
                                     info['repoName'] = path;
                                     info['repoLink'] = 'https://github.com/fontdirectory/' + path;
@@ -138,7 +133,7 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
     $scope.init();
     $scope.$watch('reqCounter', function(reqCounter) {
         // force default sorting when all data is in table
-        if (!$scope.tableInitialized && $scope.itemsLoaded) {
+        if ($scope.itemsLoaded) {
             if ($scope.buildsTableParams) {
                 $scope.buildsTableParams.sorting();
             }
@@ -148,7 +143,6 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
             if (tests_passing_errors.length > 0) {
                 $scope.alerts.addAlert('Failed to get information about tests statistics for '+tests_passing_errors.length+' items. Please see table below.', 'warning');
             }
-            $scope.tableInitialized = true;
         }
     })
 }]);
