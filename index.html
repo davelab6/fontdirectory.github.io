@@ -27,7 +27,7 @@
         </button>
         <form class="navbar-form" role="search">
           <div class="input-group">
-            <input type="text" autofocus class="form-control" placeholder="{{ metadata.name | default: 'Search'}}" name="selectRepo" ng-model="repo_selected.name" typeahead-editable="true" typeahead="r.submodule for r in repos_list | filter:$viewValue | limitTo:10" typeahead-on-select='onRepoSelect($item, $model, $label)'>
+            <input type="text" autofocus class="form-control" placeholder="{{ metadata.name | default: 'Search'}}" name="selectRepo" ng-model="repo_selected.name" typeahead-editable="true" typeahead="r.submodule for r in repos_list | filter:filterReposList($viewValue) | limitTo:10" typeahead-on-select='onRepoSelect($item, $model, $label)'>
             <div class="input-group-btn">
               <button class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
             </div>

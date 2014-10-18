@@ -25,6 +25,25 @@ angular.module('myApp').controller('mainController', ['$scope', '$rootScope', '$
             $scope.repo_current != null
     };
 
+    var removeVowels = function(str) {
+        try {
+            return str.replace(/[aeiou]/gi, '');
+        }
+        catch (e) {
+            return '';
+        }
+    };
+
+    $scope.filterWithIgnoredVowels = function(val1, val2) {
+        return removeVowels(val1).indexOf(removeVowels(val2)) > -1;
+    };
+
+    $scope.filterReposList = function( criteria ) {
+        return function( item ) {
+            return $scope.filterWithIgnoredVowels(item.submodule, criteria);
+        };
+    };
+
     $scope.isRoot = function() {
         return $location.path() == '/';
     };

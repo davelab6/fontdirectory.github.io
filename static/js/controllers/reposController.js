@@ -113,14 +113,16 @@ angular.module('myApp').controller('reposController', ['$scope', '$rootScope', '
                                     data.push(info);
                                 });
                             }
-                            var filteredData = $filter('filter')(data, $rootScope.repo_selected.name);
+                            var filteredData = $filter('filter')(data, $rootScope.repo_selected.name, function(val1, val2) {
+                                return $scope.filterWithIgnoredVowels(val1, val2)
+                            });
+
                             var orderedData = params.sorting() ?
                                 $filter('orderBy')(filteredData, params.orderBy()) :
                                 data;
                             $defer.resolve(orderedData);
                             $scope.dataLoaded = true;
                         }
-//                        $scope: $scope
                     });
                 }, function(error) {
                     $scope.alerts.addAlert(error.message);
@@ -160,4 +162,5 @@ angular.module('myApp').controller('reposController', ['$scope', '$rootScope', '
     });
 
     $scope.init();
+
 }]);
