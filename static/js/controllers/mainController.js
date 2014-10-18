@@ -15,7 +15,7 @@ angular.module('myApp').controller('mainController', ['$scope', '$rootScope', '$
 
     $scope.repo_is_valid = false;
     $scope.repo_current = null;
-    $scope.repo_selected = null;
+    $rootScope.repo_selected = {name: null};
 
     $scope.initDone = function() {
         return $rootScope.metadata != null &&
@@ -49,7 +49,7 @@ angular.module('myApp').controller('mainController', ['$scope', '$rootScope', '$
 //        $route.reload();
         $window.location.reload();
         if ($rootScope.metadata) {
-            $scope.repo_selected = $rootScope.metadata.name;
+            $rootScope.repo_selected.name = $rootScope.metadata.name;
         }
     };
 
@@ -81,12 +81,12 @@ angular.module('myApp').controller('mainController', ['$scope', '$rootScope', '$
                         appApi.getMetadataNew().then(
                             function(dataResponse) {
                                 $rootScope.metadata = dataResponse.data;
-                                $scope.repo_selected = $rootScope.metadata.name;
+                                $rootScope.repo_selected.name = $rootScope.metadata.name;
                             },
                             function(error) {
                                 appApi.getMetadata().then(function(dataResponse) {
                                     $rootScope.metadata = dataResponse.data;
-                                    $scope.repo_selected = $rootScope.metadata.name;
+                                    $rootScope.repo_selected.name = $rootScope.metadata.name;
                                 });
                             });
                     },

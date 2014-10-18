@@ -1,9 +1,10 @@
-angular.module('myApp').controller('reposController', ['$scope', '$routeParams', '$filter', '$q', '$http', 'reposApi', 'ngTableParams', 'amMoment', function($scope, $routeParams, $filter, $q, $http, reposApi, ngTableParams, amMoment) {
+angular.module('myApp').controller('reposController', ['$scope', '$rootScope', '$routeParams', '$filter', '$q', '$http', 'reposApi', 'ngTableParams', 'amMoment', function($scope, $rootScope, $routeParams, $filter, $q, $http, reposApi, ngTableParams, amMoment) {
     $scope.dataLoaded = false;
     $scope.OAuth_passed = false;
     $scope.reqCounter = 0;
     $scope.filteredTreeData = 0;
     $scope.itemsLoaded = false;
+    $scope.tableInitialized = false;
 
     var data = [],
         build_date_errors = [],
@@ -19,6 +20,7 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
     };
 
     var getBuildInfo = function(element, scope) {
+        if ($scope.itemsLoaded) {return}
         $http.get('https://api.travis-ci.org/repos/fontdirectory/' + scope.build.repoName, {headers: { 'Accept': 'application/vnd.travis-ci.2+json' }, nointercept: true}).then(function(dataResponse) {
             //dataResponse.data.repo has attrs
             // description: null
@@ -44,6 +46,7 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
     };
 
     var getTestsInfo = function(element, scope) {
+        if ($scope.itemsLoaded) {return}
         $http.get('https://cdn.rawgit.com/fontdirectory/' + scope.build.repoName + '/gh-pages/summary.tests.json', {nointercept: true}).then(function(dataResponse) {
             var tests_data = dataResponse.data,
                 totalTests = 0,
@@ -110,12 +113,14 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
                                     data.push(info);
                                 });
                             }
-                            data = params.sorting() ?
-                                $filter('orderBy')(data, params.orderBy()) :
+                            var filteredData = $filter('filter')(data, $rootScope.repo_selected.name);
+                            var orderedData = params.sorting() ?
+                                $filter('orderBy')(filteredData, params.orderBy()) :
                                 data;
-                            $defer.resolve(data);
+                            $defer.resolve(orderedData);
                             $scope.dataLoaded = true;
                         }
+//                        $scope: $scope
                     });
                 }, function(error) {
                     $scope.alerts.addAlert(error.message);
@@ -125,15 +130,23 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
                 $scope.OAuth_passed = false;
             });
     };
+
     $scope.init = function () {
         if (!$scope.OAuth_passed) {
             $scope.authenticateWithOAuth();
         }
     };
-    $scope.init();
+
+    $rootScope.$watch('repo_selected', function(repo_selected) {
+        if ($scope.buildsTableParams) {
+            $scope.buildsTableParams.reload();
+        }
+    }, true);
+
     $scope.$watch('reqCounter', function(reqCounter) {
         // force default sorting when all data is in table
-        if ($scope.itemsLoaded) {
+        if (!$scope.tableInitialized && $scope.itemsLoaded && $scope.filteredTreeData.length == data.length) {
+            $scope.tableInitialized = true;
             if ($scope.buildsTableParams) {
                 $scope.buildsTableParams.sorting();
             }
@@ -144,5 +157,7 @@ angular.module('myApp').controller('reposController', ['$scope', '$routeParams',
                 $scope.alerts.addAlert('Failed to get information about tests statistics for '+tests_passing_errors.length+' items. Please see table below.', 'warning');
             }
         }
-    })
+    });
+
+    $scope.init();
 }]);
