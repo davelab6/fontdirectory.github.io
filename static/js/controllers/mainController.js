@@ -25,22 +25,19 @@ angular.module('myApp').controller('mainController', ['$scope', '$rootScope', '$
             $scope.repo_current != null
     };
 
-    var removeVowels = function(str) {
-        try {
-            return str.replace(/[aeiou]/gi, '');
-        }
-        catch (e) {
-            return '';
-        }
+    $scope.filterWithQuicksilverRanking = function(val1, val2) {
+        //#TODO make score configurable?
+        // Add some control in search box
+        // to use either strict search (score > 0.8),
+        // flexible search (score > 0.3) ?
+        try {return LiquidMetal.score(val1 || '',  val2 || '') > 0.3;}
+        catch (e) {return false;}
+
     };
 
-    $scope.filterWithIgnoredVowels = function(val1, val2) {
-        return removeVowels(val1).indexOf(removeVowels(val2)) > -1;
-    };
-
-    $scope.filterReposList = function( criteria ) {
-        return function( item ) {
-            return $scope.filterWithIgnoredVowels(item.submodule, criteria);
+    $scope.filterReposList = function(criteria) {
+        return function(item) {
+            return $scope.filterWithQuicksilverRanking(item.submodule, criteria);
         };
     };
 

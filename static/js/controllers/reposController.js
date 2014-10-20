@@ -114,7 +114,7 @@ angular.module('myApp').controller('reposController', ['$scope', '$rootScope', '
                                 });
                             }
                             var filteredData = $filter('filter')(data, $rootScope.repo_selected.name, function(val1, val2) {
-                                return $scope.filterWithIgnoredVowels(val1, val2)
+                                return $scope.filterWithQuicksilverRanking(val1, val2)
                             });
 
                             var orderedData = params.sorting() ?
