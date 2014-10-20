@@ -9,8 +9,8 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-xs-6 col-md-5 col-lg-4" ng-repeat="chart in charts">
-      <div google-chart chart="chart" style="{{cssStyle}}"></div>
+    <div class="col-xs-3 col-md-2 col-lg-2" ng-repeat="chart in charts">
+      <div google-chart chart="chart" on-ready="mixins.updateChartTitle(chart)" style="{{cssStyle}}"></div>
     </div>
   </div>
   <div class="flex-container">
