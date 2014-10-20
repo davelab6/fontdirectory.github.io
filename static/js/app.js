@@ -8,7 +8,8 @@ var myApp = angular.module(
 // #TODO it would be better to get it from .json conf file once and use later.
 // Allows to not change code, but rather external file
 myApp.constant("appConfig", {
-    base_url: '//cdn.rawgit.com', //#TODO should be changed for JSONP,
+    base_url: '//cdn.rawgit.com',
+    base_url_no_cdn: '//rawgit.com',
     git_modules_url: '//cdn.rawgit.com/fontdirectory/collection/master/gitmodules.json',
     data_dir: 'data',
     pages_dir: 'pages',
@@ -91,7 +92,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
             activetab: 'summary',
             css: function(params) {
                 if (params.repo_name) {
-                    return [[appConfig.base_url, params.repo_owner, params.repo_name, 'gh-pages/build_info/static/css/faces.css'].join('/')];
+                    return [[appConfig.base_url_no_cdn, params.repo_owner, params.repo_name, 'gh-pages/build_info/static/css/faces.css'].join('/')];
                 } else {
                     return [];
                 }
@@ -110,7 +111,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
                     'static/css/pages/opentype.css'
                 ];
                 if (params.repo_name) {
-                    var faces = [appConfig.base_url, params.repo_owner, params.repo_name, 'gh-pages/build_info/static/css/faces.css'].join('/');
+                    var faces = [appConfig.base_url_no_cdn, params.repo_owner, params.repo_name, 'gh-pages/build_info/static/css/faces.css'].join('/');
                     links.push(faces);
                 }
                 return links;
@@ -129,7 +130,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
                     'static/css/pages/opentype.css'
                 ];
                 if (params.repo_name) {
-                    var faces = [appConfig.base_url, params.repo_owner, params.repo_name, 'gh-pages/build_info/static/css/faces.css'].join('/');
+                    var faces = [appConfig.base_url_no_cdn, params.repo_owner, params.repo_name, 'gh-pages/build_info/static/css/faces.css'].join('/');
                     links.push(faces);
                 }
                 return links;

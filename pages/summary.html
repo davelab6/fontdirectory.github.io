@@ -13,9 +13,6 @@
     </thead>
     <tbody>
     <tr ng-repeat="(weight, faces) in faces track by $index">
-      <td>
-        <div ng-repeat="face in faces">{{ face.filename }}</div>
-      </td>
       <td>{{ weight }}</td>
       <td>
         <div ng-repeat="face in faces">

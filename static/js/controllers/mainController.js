@@ -93,13 +93,13 @@ angular.module('myApp').controller('mainController', ['$scope', '$rootScope', '$
                             $scope.repo_info = dataResponse.data;
                         });
 
-                        appApi.getMetadataNew().then(
+                        appApi.getMetadata().then(
                             function(dataResponse) {
                                 $rootScope.metadata = dataResponse.data;
                                 $rootScope.repo_selected.name = $rootScope.metadata.name;
                             },
                             function(error) {
-                                appApi.getMetadata().then(function(dataResponse) {
+                                appApi.getMetadataNew().then(function(dataResponse) {
                                     $rootScope.metadata = dataResponse.data;
                                     $rootScope.repo_selected.name = $rootScope.metadata.name;
                                 });
