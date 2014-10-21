@@ -1,4 +1,4 @@
-myApp.controller('bakeryYamlController', ['$scope', '$http', 'bakeryYamlApi', 'PathBuilder', function($scope, $http, bakeryYamlApi, PathBuilder) {
+myApp.controller('setupController', ['$scope', '$http', 'bakeryYamlApi', 'PathBuilder', function($scope, $http, bakeryYamlApi, PathBuilder) {
     $scope.dataLoaded = false;
 
     bakeryYamlApi.getYamlFile().then(function(response) {

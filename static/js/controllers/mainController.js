@@ -15,7 +15,7 @@ angular.module('myApp').controller('mainController', ['$scope', '$rootScope', '$
 
     $scope.repo_is_valid = false;
     $scope.repo_current = null;
-    $scope.repo_selected = null;
+    $rootScope.repo_selected = {name: null};
 
     $scope.initDone = function() {
         return $rootScope.metadata != null &&
@@ -23,6 +23,26 @@ angular.module('myApp').controller('mainController', ['$scope', '$rootScope', '$
             $scope.app_info != null &&
             $scope.repo_info != null &&
             $scope.repo_current != null
+    };
+
+    $scope.filterWithQuicksilverRanking = function(val1, val2) {
+        //#TODO make score configurable?
+        // Add some control in search box
+        // to use either strict search (score > 0.8),
+        // flexible search (score > 0.3) ?
+        try {
+            if (!val2) {
+                return true
+            }
+            return val1.score(val2) > 0.3;
+        }
+        catch (e) {return false;}
+    };
+
+    $scope.filterReposList = function(criteria) {
+        return function(item) {
+            return $scope.filterWithQuicksilverRanking(item.submodule, criteria);
+        };
     };
 
     $scope.isRoot = function() {
@@ -49,7 +69,7 @@ angular.module('myApp').controller('mainController', ['$scope', '$rootScope', '$
 //        $route.reload();
         $window.location.reload();
         if ($rootScope.metadata) {
-            $scope.repo_selected = $rootScope.metadata.name;
+            $rootScope.repo_selected.name = $rootScope.metadata.name;
         }
     };
 
@@ -78,15 +98,15 @@ angular.module('myApp').controller('mainController', ['$scope', '$rootScope', '$
                             $scope.repo_info = dataResponse.data;
                         });
 
-                        appApi.getMetadataNew().then(
+                        appApi.getMetadata().then(
                             function(dataResponse) {
                                 $rootScope.metadata = dataResponse.data;
-                                $scope.repo_selected = $rootScope.metadata.name;
+                                $rootScope.repo_selected.name = $rootScope.metadata.name;
                             },
                             function(error) {
-                                appApi.getMetadata().then(function(dataResponse) {
+                                appApi.getMetadataNew().then(function(dataResponse) {
                                     $rootScope.metadata = dataResponse.data;
-                                    $scope.repo_selected = $rootScope.metadata.name;
+                                    $rootScope.repo_selected.name = $rootScope.metadata.name;
                                 });
                             });
                     },

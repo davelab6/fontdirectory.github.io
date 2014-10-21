@@ -2,13 +2,14 @@
 
 // create module and include dependencies
 var myApp = angular.module(
-    'myApp', ['ngRoute', 'ui.bootstrap', 'ui.ace', 'googlechart', 'ngTable', 'ngSanitize', 'routeStyles', 'angularMoment']
+    'myApp', ['ngRoute', 'ui.bootstrap', 'ui.ace', 'googlechart', 'ngTable', 'ngSanitize', 'routeStyles', 'angularMoment', 'http-throttler']
 );
 
 // #TODO it would be better to get it from .json conf file once and use later.
 // Allows to not change code, but rather external file
 myApp.constant("appConfig", {
-    base_url: '//cdn.rawgit.com', //#TODO should be changed for JSONP,
+    base_url: '//cdn.rawgit.com',
+    base_url_no_cdn: '//rawgit.com',
     git_modules_url: '//cdn.rawgit.com/fontdirectory/collection/master/gitmodules.json',
     data_dir: 'data',
     pages_dir: 'pages',
@@ -62,8 +63,10 @@ myApp.factory('httpInterceptor', ['$q', '$location', 'alertsFactory', function($
 
         // optional method
         'responseError': function(rejection) {
-            // add alert for every error
-            alertsFactory.addAlert(rejection.status + " - " + rejection.statusText + ": " + _config.url);
+            // add alert for every error if interceptor is allowed
+            if (!_config.nointercept) {
+                alertsFactory.addAlert(rejection.status + " - " + rejection.statusText + ": " + _config.url);
+            }
             return $q.reject(rejection);
         }
     };
@@ -77,7 +80,8 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
         .when('/', {
             controller : 'reposController',
             title: 'Repos list',
-            templateUrl : 'pages/repos_list.html'
+            templateUrl : 'pages/repos_list.html',
+            activetab: 'repos'
         })
 
         // route for the summary page
@@ -85,9 +89,10 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
             title: 'Summary',
             templateUrl : 'pages/summary.html',
             controller  : 'summaryController',
+            activetab: 'summary',
             css: function(params) {
                 if (params.repo_name) {
-                    return ['//rawgit.com/' + [params.repo_owner, params.repo_name].join('/') +'/gh-pages/build_info/static/css/faces.css'];
+                    return [[appConfig.base_url_no_cdn, params.repo_owner, params.repo_name, 'gh-pages/build_info/static/css/faces.css'].join('/')];
                 } else {
                     return [];
                 }
@@ -95,17 +100,18 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
         })
 
         // route for the review page, web fonts tab
-        .when('/:repo_owner/:repo_name/review-web-fonts', {
+        .when('/:repo_owner/:repo_name/review', {
             title: 'Review - Web Fonts',
             templateUrl : 'pages/review-web-fonts.html',
             controller  : 'reviewWebFontsController',
+            activetab: 'review_fonts',
             css: function(params) {
                 var links = [
                     'static/css/pages/review.css',
                     'static/css/pages/opentype.css'
                 ];
                 if (params.repo_name) {
-                    var faces = '//rawgit.com/' + [params.repo_owner, params.repo_name].join('/') +'/gh-pages/build_info/static/css/faces.css';
+                    var faces = [appConfig.base_url_no_cdn, params.repo_owner, params.repo_name, 'gh-pages/build_info/static/css/faces.css'].join('/');
                     links.push(faces);
                 }
                 return links;
@@ -113,17 +119,18 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
         })
 
         // route for the review page, glyph inspector tab
-        .when('/:repo_owner/:repo_name/review-glyph-inspector', {
+        .when('/:repo_owner/:repo_name/review/glyph-inspector', {
             title: 'Review - Glyph Inspector',
             templateUrl : 'pages/review-glyph-inspector.html',
             controller  : 'reviewGlyphInspectorController',
+            activetab: 'review_fonts',
             css: function(params) {
                 var links = [
                     'static/css/pages/review.css',
                     'static/css/pages/opentype.css'
                 ];
                 if (params.repo_name) {
-                    var faces = '//rawgit.com/' + [params.repo_owner, params.repo_name].join('/') +'/gh-pages/build_info/static/css/faces.css';
+                    var faces = [appConfig.base_url_no_cdn, params.repo_owner, params.repo_name, 'gh-pages/build_info/static/css/faces.css'].join('/');
                     links.push(faces);
                 }
                 return links;
@@ -134,22 +141,25 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
         .when('/:repo_owner/:repo_name/checks', {
             title: 'Pre-Build Checks',
             templateUrl : 'pages/checks.html',
-            controller  : 'checksController'
+            controller  : 'checksController',
+            activetab: 'checks'
         })
 
         // route for the tests page
         .when('/:repo_owner/:repo_name/tests', {
             title: 'Tests',
             templateUrl : 'pages/tests.html',
-            controller  : 'testsController'
+            controller  : 'testsController',
+            activetab: 'tests'
         })
 
         // route for the build log page
-        .when('/:repo_owner/:repo_name/build-log', {
+        .when('/:repo_owner/:repo_name/log', {
             title: 'Build Log',
-            templateUrl : 'pages/build.html',
-            controller  : 'buildController',
-            css: 'static/css/pages/build-log.css'
+            templateUrl : 'pages/log.html',
+            controller  : 'logController',
+            activetab: 'log',
+            css: 'static/css/pages/log.css'
         })
 
         // route for the metadata page
@@ -157,14 +167,16 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
             title: 'Metadata',
             templateUrl : 'pages/metadata.html',
             controller  : 'metadataController',
+            activetab: 'metadata',
             css: 'static/css/libs/jsondiffpatch/html.css'
         })
 
         // route for the bakery yaml page
-        .when('/:repo_owner/:repo_name/bakery-yaml', {
-            title: 'bakery.yaml',
-            templateUrl : 'pages/bakery-yaml.html',
-            controller  : 'bakeryYamlController'
+        .when('/:repo_owner/:repo_name/setup', {
+            title: 'Setup',
+            templateUrl : 'pages/setup.html',
+            controller  : 'setupController',
+            activetab: 'setup'
         })
 
         // route for the description page
@@ -172,6 +184,7 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
             title: 'Description',
             templateUrl : 'pages/description.html',
             controller  : 'descriptionController',
+            activetab: 'description',
             css: 'static/css/libs/jsondiffpatch/html.css'
         })
         .otherwise({redirectTo: '/'});
@@ -189,6 +202,9 @@ myApp.config(['$routeProvider', '$httpProvider', '$locationProvider', 'appConfig
     // enable default caching
     $httpProvider.defaults.cache = true;
     // intercept http calls
+    // throttle active parallel requests
+    $httpProvider.interceptors.push('httpThrottler');
+    // do some common error handling
     $httpProvider.interceptors.push('httpInterceptor');
 
 }]);
@@ -198,6 +214,7 @@ myApp.run(['$location', '$rootScope', function($location, $rootScope) {
     $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
         $rootScope.title = current.$$route.title;
         $rootScope.current_template = current.$$route.templateUrl;
+        $rootScope.activetab = current.$$route.activetab;
     });
 }]);
 
