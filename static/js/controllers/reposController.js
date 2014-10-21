@@ -153,10 +153,10 @@ angular.module('myApp').controller('reposController', ['$scope', '$rootScope', '
                 $scope.buildsTableParams.sorting();
             }
             if (build_date_errors.length > 0) {
-                $scope.alerts.addAlert('Failed to get information about last build dates for '+build_date_errors.length+' items. Please see table below.', 'warning');
+                $scope.alerts.addAlert('Build dates for '+build_date_errors.length+' projects could not be found, so those projects have no date in the table below. Try rebuliding them.', 'warning');
             }
             if (tests_passing_errors.length > 0) {
-                $scope.alerts.addAlert('Failed to get information about tests statistics for '+tests_passing_errors.length+' items. Please see table below.', 'warning');
+                $scope.alerts.addAlert('Test results for '+tests_passing_errors.length+' projects could not be found, so those projects have an orange N/A result in the table below. Try rebuliding them.', 'warning');
             }
         }
     });
