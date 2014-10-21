@@ -30,7 +30,12 @@ angular.module('myApp').controller('mainController', ['$scope', '$rootScope', '$
         // Add some control in search box
         // to use either strict search (score > 0.8),
         // flexible search (score > 0.3) ?
-        try {return val1.score(val2) > 0.3;}
+        try {
+            if (!val2) {
+                return true
+            }
+            return val1.score(val2) > 0.3;
+        }
         catch (e) {return false;}
     };
 
